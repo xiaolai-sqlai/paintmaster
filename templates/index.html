@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="renderer" content="webkit">
+	<title>绘图大师</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/app.css">
+	<script src="/static/libs/zepto.js"></script>
+</head>
+
+<body>
+	<header class="index-header"></header>
+	<main class="index-main">
+		<a href="detail/1">
+			<img src="/static/images/item01.jpg" alt="">
+			<h2>沙画</h2>
+		</a>
+		<a href="detail/2">
+			<img src="/static/images/item02.jpg" alt="">
+			<h2>冰晶</h2>
+		</a>
+		<a href="detail/3">
+			<img src="/static/images/item03.jpg" alt="">
+			<h2>铜像</h2>
+		</a>
+		<a href="detail/4">
+			<img src="/static/images/item04.jpg" alt="">
+			<h2>素描</h2>
+		</a>
+		<a href="detail/5">
+			<img src="/static/images/item05.jpg" alt="">
+			<h2>水墨</h2>
+		</a>
+		<a href="detail/6">
+			<img src="/static/images/item06.jpg" alt="">
+			<h2>涂鸦</h2>
+		</a>
+	</main>
+	<footer>
+		<a id="home" class="active" href="{{url_for('index')}}">
+			<img src="/static/images/home.png" alt="">
+			<p>首页</p>
+		</a>
+		<a id="gallery" href="{{url_for('gallery')}}">
+			<img src="/static/images/gallery.png" alt="">
+			<p>我的展馆</p>
+		</a>
+		<a id="share" href="#">
+			<img src="/static/images/share.png" alt="">
+			<p>告诉朋友</p>
+		</a>
+	</footer>
+</body>
+</html>

@@ -1,0 +1,26 @@
+#camera {
+	width: 70px;
+	height: 70px;
+	position: absolute;
+	bottom: 5vh;
+	left: 50%;
+	margin-left: -35px;
+	border-radius: 50%;
+	border: 3px solid #ee4c36;
+	box-shadow: 0 0 5px #666;
+	i {
+		width: 60px;
+		height: 60px;
+		display: block;
+		margin: 5px;
+		border-radius: 50%;
+		background: #fff url(../images/camera.jpg) no-repeat 10px 10px;
+	}
+}
+#pic {
+	width: 90vw;
+	margin-left: 5vw;
+	background-color: #fff;
+	height: 65vh;
+	margin-top: 80px;
+}

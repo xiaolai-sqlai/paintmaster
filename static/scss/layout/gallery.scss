@@ -1,0 +1,38 @@
+.gallery-header {
+	position: fixed;
+	top: 0;
+	height: 55px;
+	width: 100%;
+	background-color: #222;
+	h1 {
+		line-height: 55px;
+		color: #fff;
+		text-align: center;
+		font-size: 21px;
+	}
+}
+.gallery-main {
+	padding-top: 55px;
+	&>div {
+		display: inline-block;
+		box-sizing: border-box;
+		width: 96vw;
+		margin-left: 2vw;
+		margin-top: 4vw;
+		padding: 2vw;
+		background-color: #fff;
+	}
+	div div {
+		float: left;
+		width: 20vw;
+		height: 20vw;
+		margin: 1.5vw;
+	}
+	img {
+		width: 100%;
+	}
+ 	h2 {
+ 		font-size: 18px;
+ 		margin-bottom: 20px;
+ 	}
+}

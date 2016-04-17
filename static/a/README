@@ -1,0 +1,10 @@
+Method:
+please put all the documents in the fold '/a' to the input images 
+
+1. sand style:
+cd a
+th neural_sand_server.lua -content_image '(PATH)' -output_image '(PATH)'
+
+2. diamond style:
+cd a
+th neural_server.lua -content_image '(PATH)' -output_image '(PATH)'

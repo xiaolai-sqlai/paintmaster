@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <title>绘图大师</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/app.css">
+    <script src="/static/libs/zepto.js"></script>
+</head>
+<body>
+<header class="gallery-header">
+    <h1>用户注册</h1>
+</header>
+<form id="login-form" action="/register" method="POST">
+    <div id="phone">
+        <input type="text" name="userphone" placeholder="输入手机号码">
+    </div>
+    <div id="password">
+        <input id="password" name="password" type="text" placeholder="输入密码">
+    </div>
+    <div id="repeat">
+        <input type="text" placeholder="重复密码">
+    </div>
+    <div id="warning"></div>
+</form>
+<input id="register" type="submit" form="login-form" value="立即注册">
+<script>
+    (function(){
+        var warning = $('#warning');
+
+        $('#phone input').on('blur', function(){
+            var userphone = $('#phone input').val();
+            if(userphone.length != 11) {
+                warning.text('手机号错误');
+            } else {
+                warning.text('');
+            }
+        });
+
+        $('#password input').on('blur', function(){
+            var password = $('#password input').val();
+            var repeat = $('#repeat input').val();
+            if(!repeat || password == repeat) {
+                warning.text('');
+            } else {
+                warning.text('密码错误');
+            }
+        });
+
+        $('#repeat input').on('blur', function(){
+            var password = $('#password input').val();
+            var repeat = $('#repeat input').val();
+            if(password != repeat) {
+                warning.text('密码错误');
+            } else {
+                warning.text('');
+            }
+        });
+
+        $('#register').on('click', function(e){
+            var warning = $('#warning').val();
+            if(warning) {
+                console.log('success');
+                e.preventDefault();
+            }
+        });
+
+    })()
+</script>
+</body>
+</html>

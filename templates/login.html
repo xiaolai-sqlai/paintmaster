@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <title>绘图大师</title>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/app.css')}}">
+    <script src="/static/libs/zepto.js"></script>
+    <script src="/static/libs/zepto.cookie.js"></script>
+</head>
+<body>
+<header class="gallery-header">
+    <h1>用户登陆</h1>
+</header>
+<form id="login-form" action="/login" method="POST">
+    <div id="phone">
+        <input type="text" name="userphone" placeholder="输入手机号码">
+    </div>
+    <div id="password">
+        <input type="text" name="password" placeholder="输入密码">
+    </div>
+    <div class="href">
+        <a class="left" href="{{url_for('register')}}">立即注册</a>
+        <a class="right" href="#">忘记密码</a>
+    </div>
+    <div id="warning"></div>
+</form>
+<button id="login">立即登陆</button>
+<script>
+    (function(){
+        var warning = $('#warning');
+
+        $('#phone input').on('blur', function(){
+            var userphone = $('#phone input').val();
+            if(userphone.length != 11) {
+                warning.text('手机号错误');
+            } else {
+                warning.text('');
+            }
+        });
+
+        $('#password input').on('blur', function(){
+            var password = $('#password input').val();
+            if(!password) {
+                warning.text('密码不能为空');
+            } else {
+                warning.text('');
+            }
+        });
+
+        $('#login').on('click', function(e){
+            var userphone = $('#phone input').val();
+            var password = $('#password input').val();
+            if(!warning.text()) {
+                $.ajax({
+                    url:"/login",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        'userphone': userphone,
+                        'password': password
+                    },
+                    success: function(res){
+                        if(res == '-1'){
+                            alert('账号错误');
+                        } else if(res == '0') {
+                            alert('密码错误');
+                        } else {
+                            $.fn.cookie('userphone', userphone, { expires: 7 });
+                            $.fn.cookie('id', res, {expires: 7});
+                            window.location.href = '/';
+                        }
+                    }
+                });
+            }
+        });
+    })()
+</script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <title>绘图大师</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/app.css?1">
+    <script src="/static/libs/zepto.js"></script>
+</head>
+<body>
+<header class="gallery-header">
+    <h1>照片选择</h1>
+</header>
+<form id="upload-form" action="/upload/{{style}}" method="POST" enctype="multipart/form-data">
+    <div id="pic"></div>
+    <input id="uploadInput" type="file" accept="image/jpeg" name="file">
+</form>
+<div id="camera">
+    <i></i>
+</div>
+<div id="btn-group">
+    <a id="redo-btn" href="#">重拍</a>
+    <a id="submit-btn" href="#">完成</a>
+</div>
+<script>
+    $('#uploadInput').on('change', function(){
+        var objUrl = getObjectURL(this.files[0]) ;
+        if (objUrl) {
+            $('#pic').css('backgroundSize', 'cover').css("backgroundImage","url("+ objUrl +")");
+            $('#camera').hide()
+            $('#btn-group').show();
+        }
+    });
+
+    $('#camera').on('click', function(){
+        $('#uploadInput').click();
+    });
+
+    $('#redo-btn').on('click', function(){
+        $('#uploadInput').click();
+    });
+
+    $('#submit-btn').on('click', function(){
+        $('#upload-form').submit();
+    });
+
+    function getObjectURL(file) {
+        var url = null ;
+        if (window.createObjectURL!=undefined) { // basic
+            url = window.createObjectURL(file) ;
+        } else if (window.URL!=undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file) ;
+        } else if (window.webkitURL!=undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file) ;
+        }
+        return url ;
+    }
+</script>
+</body>
+</html>

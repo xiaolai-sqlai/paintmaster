@@ -1,0 +1,13 @@
+VGG_ILSVRC_19_layers.caffemodel
+VGG_ILSVRC_19_layers_deploy.prototxt
+VGG_ILSVRC_19_layers_deploy.prototxt.lua
+VGG_ILSVRC_19_layers.caffemodel
+vgg_normalised.caffemodel
+audio/
+hands/
+input/
+output/
+regions/
+temp/
+video/
+videores/
