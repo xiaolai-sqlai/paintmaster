@@ -42,7 +42,7 @@ def neural(imageName, style):
         cmd02 = './video_sand output/' + imageName + '.jpg ' + imageName
         cmd03 = 'ffmpeg -i ' + imageName + '.avi -f mpeg ' + imageName + '.mp4'
         cmd04 = 'ffmpeg -i concat:"result1.mp4|'+ imageName +'.mp4" -c copy -f mpeg ' + imageName+ 'res.mp4'
-        cmd05 = 'ffmpeg -i audio/' + song + '.mp3 -i video/' + imageName + 'res.mp4 videores/' + imageName + '.mp4'
+        cmd05 = 'ffmpeg -i audio/' + song + '.mp3 -i video/' + imageName + 'res.mp4 -vcodec libx264 videores/' + imageName + '.mp4'
         res01 = subprocess.Popen(cmd01, shell=True, cwd=r'./static/a/')
         res01.wait()
         res02 = subprocess.Popen(cmd02, shell=True, cwd=r'./static/a/')
@@ -60,9 +60,12 @@ def neural(imageName, style):
         res.wait()
     elif(type == '4'):
         print type
-        cmd = './sketch input/' + imageName + '.jpg output ' + imageName
-        res = subprocess.Popen(cmd, shell=True, cwd=r'./static/a/')
-        res.wait()
+        cmd01 = './sketch input/' + imageName + '.jpg sketchout ' + imageName
+        cmd02 = './sumiao ' + imageName
+        res01 = subprocess.Popen(cmd01, shell=True, cwd=r'./static/a/')
+        res01.wait()
+        res02 = subprocess.Popen(cmd02, shell=True, cwd=r'./static/a/')
+        res02.wait()
     session = DBSession()
     alter_img = session.query(Images).filter(Images.src_img == (imageName)).first()
     alter_img.finish_img = 1
