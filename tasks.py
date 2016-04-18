@@ -33,10 +33,38 @@ DBSession = sessionmaker(bind=engine)
 
 @celery.task
 def neural(imageName, style):
+    session = DBSession()
     type = style
     song = '1'
     print type
-    if (type == '1'):
+    if(type == '1'):
+        print type
+        cmd01 = './sketch input/' + imageName + '.jpg sketchout ' + imageName
+        cmd02 = './sumiao ' + imageName
+        res01 = subprocess.Popen(cmd01, shell=True, cwd=r'./static/a/')
+        res01.wait()
+        res02 = subprocess.Popen(cmd02, shell=True, cwd=r'./static/a/')
+        res02.wait()
+        alter_img = session.query(Images).filter(Images.src_img == (imageName)).first()
+        alter_img.finish_img = 1
+        session.add(alter_img)
+        session.commit()
+    elif(type == '2'):
+        print type
+        cmd01 = './water ' + imageName
+        cmd02 = 'ffmpeg -i out.avi -y -f image2 -ss 0 -vframes 1 output/' +  imageName + '.jpg'
+        cmd03 = 'ffmpeg -ss 0 -t 2 -i out.avi -s 480x640 -f gif output/' + imageName + '.gif'
+        res01 = subprocess.Popen(cmd01, shell=True, cwd=r'./static/a/')
+        res01.wait()
+        res02 = subprocess.Popen(cmd02, shell=True, cwd=r'./static/a/')
+        res02.wait()
+        res03 = subprocess.Popen(cmd03, shell=True, cwd=r'./static/a/')
+        res03.wait()
+        alter_img = session.query(Images).filter(Images.src_img == (imageName)).first()
+        alter_img.finish_img = 1
+        session.add(alter_img)
+        session.commit()
+    elif (type == '3'):
         print type
         cmd01 = 'th neural_sand_server.lua -content_image input/' + imageName + '.jpg -output_image output/' + imageName + '.jpg'
         cmd02 = './video_sand output/' + imageName + '.jpg ' + imageName
@@ -53,23 +81,18 @@ def neural(imageName, style):
         res04.wait()
         res05 = subprocess.Popen(cmd05, shell=True, cwd=r'./static/a/')
         res05.wait()
-    elif(type == '2'):
+        alter_img = session.query(Images).filter(Images.src_img == (imageName)).first()
+        alter_img.finish_img = 1
+        alter_img.finish_video = 1
+        session.add(alter_img)
+        session.commit()
+    elif(type == '4'):
         print type
         cmd = 'th neural_server.lua -content_image input/' + imageName + '.jpg -output_image output/' + imageName + '.jpg'
         res = subprocess.Popen(cmd, shell=True, cwd=r'./static/a/')
         res.wait()
-    elif(type == '4'):
-        print type
-        cmd01 = './sketch input/' + imageName + '.jpg sketchout ' + imageName
-        cmd02 = './sumiao ' + imageName
-        res01 = subprocess.Popen(cmd01, shell=True, cwd=r'./static/a/')
-        res01.wait()
-        res02 = subprocess.Popen(cmd02, shell=True, cwd=r'./static/a/')
-        res02.wait()
-    session = DBSession()
-    alter_img = session.query(Images).filter(Images.src_img == (imageName)).first()
-    alter_img.finish_img = 1
-    alter_img.finish_video = 1
-    session.add(alter_img)
-    session.commit()
+        alter_img = session.query(Images).filter(Images.src_img == (imageName)).first()
+        alter_img.finish_img = 1
+        session.add(alter_img)
+        session.commit()
     session.close()

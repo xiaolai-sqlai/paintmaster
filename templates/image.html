@@ -12,8 +12,26 @@
     <h1>作品陈列室</h1>
 </header>
 <main class="image-main">
-    {% if show.style == 4 %}
+    {% if show.style == 1 %}
         <img src="/static/a/sketchout/{{show.src_img}}_7.jpg" alt="">
+    {% elif show.style == 2 %}
+        <img src="/static/a/output/{{show.src_img}}.gif" alt="">
+        <canvas id="canvas">你的浏览器不支持canvas</canvas>
+	    <script src="/static/js/mask.js"></script>
+        <style>
+        #canvas {
+            display: block;
+            position: absolute;
+            top: 55px;
+            bottom: 80px;
+            left: 0;
+            opacity: 0.9;
+        }
+        .image-main img {
+            position: absolute;
+            width: 100%;
+        }
+        </style>
     {% else %}
         <img src="/static/a/output/{{show.src_img}}.jpg" alt="">
     {% endif %}

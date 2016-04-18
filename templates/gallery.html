@@ -17,7 +17,7 @@
         <h2>图片集</h2>
         {% for image in images %}
             <a href="#">
-            {% if image.style == 4 %}
+            {% if image.style == 1 %}
                 <img src="/static/a/sketchout/{{image.src_img}}_7.jpg" data-imgid="{{image.id}}" alt="">
             {% else %}
                 <img src="/static/a/output/{{image.src_img}}.jpg" data-imgid="{{image.id}}" alt="">
