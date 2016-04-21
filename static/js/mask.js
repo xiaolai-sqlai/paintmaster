@@ -59,3 +59,8 @@ cvs.addEventListener(moveEvtName, function (e) {
 	ctx.globalCompositeOperation = 'destination-out';
 	fillCircle.call(ctx, x, y-55, touchRadius);
 }, false);
+
+var audio = document.getElementById('audio');
+document.addEventListener('touchstart', function(){
+    audio.play();
+}, false);
