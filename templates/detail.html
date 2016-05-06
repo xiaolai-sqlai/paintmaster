@@ -12,7 +12,7 @@
 <header class="gallery-header">
     <h1>照片选择</h1>
 </header>
-<form id="upload-form" action="/upload/{{style}}" method="POST" enctype="multipart/form-data">
+<form id="upload-form" action="/upload" method="POST" enctype="multipart/form-data" data-style="{{style}}">
     <div id="pic"></div>
     <input id="uploadInput" type="file" accept="image/jpeg" name="file">
 </form>
@@ -23,9 +23,10 @@
     <a id="redo-btn" href="#">重拍</a>
     <a id="submit-btn" href="#">完成</a>
 </div>
+
 <script>
     $('#uploadInput').on('change', function(){
-        var objUrl = getObjectURL(this.files[0]) ;
+        var objUrl = getObjectURL(this.files[0]);
         if (objUrl) {
             $('#pic').css('backgroundSize', 'cover').css("backgroundImage","url("+ objUrl +")");
             $('#camera').hide()

@@ -6,7 +6,7 @@
     <meta name="renderer" content="webkit">
     <title>绘图大师</title>
     <link rel="stylesheet" type="text/css" href="/static/css/app.css?1">
-	<script src="/static/libs/zepto.js"></script>
+    <script src="/static/libs/zepto.js"></script>
 </head>
 <body>
 <header class="gallery-header">
@@ -17,11 +17,11 @@
         <h2>图片集</h2>
         {% for image in images %}
             <a href="#">
-            {% if image.style == 1 %}
-                <img src="/static/a/sketchout/{{image.src_img}}_7.jpg" data-imgid="{{image.id}}" alt="">
-            {% else %}
-                <img src="/static/a/output/{{image.src_img}}.jpg" data-imgid="{{image.id}}" alt="">
-            {% endif %}
+                {% if image.style == 1 %}
+                    <img src="/static/a/sketchout/{{image.src_img}}_7.jpg" data-imgid="{{image.id}}" alt="">
+                {% else %}
+                    <img src="/static/a/output/{{image.src_img}}.jpg" data-imgid="{{image.id}}" alt="">
+                {% endif %}
             </a>
         {% endfor %}
     </div>
@@ -29,7 +29,11 @@
         <h2>视频集</h2>
         {% for video in videos %}
             <a href="#">
-                <img src="/static/a/output/{{video.src_img}}.jpg" data-videoid="{{video.id}}">
+                {% if video.style == 1 %}
+                    <img src="/static/a/sketchout/{{video.src_img}}_7.jpg" data-videoid="{{video.id}}" alt="">
+                {% else %}
+                    <img src="/static/a/output/{{video.src_img}}.jpg" data-videoid="{{video.id}}" alt="">
+                {% endif %}
             </a>
         {% endfor %}
     </div>

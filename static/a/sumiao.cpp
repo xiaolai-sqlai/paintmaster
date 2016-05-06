@@ -4,24 +4,24 @@
 #include <cv.h>
 #include <string>
 
+
 using namespace std;
 using namespace cv;
 
 
-int main()
+
+int main(int argc, char *argv[])
 {
-	char sourceImPath[50];
 	char targetImPath[50];
-  	sprintf(sourceImPath, "input/%s.jpg", argv[1]);
 	sprintf(targetImPath, "sketchout/%s_7.jpg", argv[1]);
 	string pencilPath = "pencil.png";
 
-	Mat originalIm = imread(sourceImPath);
+	Mat originalIm = imread(targetImPath);
 	Mat backgroundIm = Mat(originalIm.size(), CV_8UC3, Scalar(255, 255, 255));
-	//Mat sourceIm = imread(sourceImPath, CV_LOAD_IMAGE_COLOR);
+
 	Mat targetIm = imread(targetImPath);
 	Mat pencilIm = imread(pencilPath);
-	Mat mask = imread(pencilPath, 0);
+	Mat mask = imread(pencilPath);
 	int r = originalIm.rows;
 	int c = originalIm.cols;
 	int num_pix = 0;
@@ -29,48 +29,60 @@ int main()
 	Mat edgeIm;
 	Canny(targetIm, edgeIm, 50, 100, 3);
 
-	cv::vector<cv::vector<cv::Point> > contours(1000);
+
+	vector<vector<Point> > contours;
 	cv::vector<cv::Vec4i> hierarchy;
 
-	findContours(edgeIm, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
-
+	findContours(edgeIm, contours, hierarchy,CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE);
 
 
 	cv::vector<cv::vector<cv::Point> > contours_poly(contours.size());
-	cv::vector<cv::Rect> boundRect(contours.size());                   
 
-	for (int i = 0; i < contours.size(); i++)
+	cv::vector<cv::Rect> boundRect(contours.size());
+
+	for (int i = 0; i<contours.size(); i++)
 	{
 		approxPolyDP(Mat(contours[i]), contours_poly[i], 3, true);
 		boundRect[i] = boundingRect(Mat(contours_poly[i]));
 	}
 
+
 	Mat drawing = Mat::zeros(edgeIm.size(), CV_8UC3);
 	int pix_num = 0;
 	int pix_sum=0;
-	for (int i = 0; i < contours.size();i++)
+	int threshold;
+
+	for (int p = 1; p <= 50; p++)
 	{
-		if (boundRect[i].width >= c / 20 || boundRect[i].height >= r / 20)
+		for (int i = 0; i < contours.size(); i++)
 		{
-			for (int k = 0; k < contours_poly[i].capacity(); k++)
+			if (boundRect[i].width >= c / p || boundRect[i].height >= r / p)
 			{
-				pix_sum++;
+				for (int k = 0; k < contours_poly[i].capacity(); k++)
+				{
+					pix_sum++;
+				}
 			}
 		}
+
+		if (pix_sum >= 350)
+		{
+			threshold = p;
+			break;
+		}
 	}
+
 	int page;
-	page = 320 / 7;
-	cout << "page" << page << endl;
+	page = 350 / 7;
+	cout << "页数" << page << endl;
 
 
-	for (int i = 0; i < contours.size(); i++)
+	for (int i = 0; i<contours.size(); i++)
 	{
 		Scalar color = Scalar(255, 255, 255);
-		if (boundRect[i].width >= c / 20|| boundRect[i].height >= r / 20)
+		if (boundRect[i].width >= c / threshold || boundRect[i].height >= r / threshold)
 		{
-			//rectangle(drawing, boundRect[i].tl(), boundRect[i].br(), color, 2, 8, 0);
-			drawContours(drawing, contours_poly, i, color, 1, 8, vector<Vec4i>(), 0, Point());
-			cout << boundRect[i].width << boundRect[i].height << endl;
+			cout << boundRect[i].width << "<-宽度，高度->" << boundRect[i].height << endl;
 
 			for (int k = 0; k < contours_poly[i].capacity(); k++)
 			{
@@ -80,28 +92,21 @@ int main()
 				Mat submask1;
 				Mat subpencilIm1;
 				Mat targetIm1;
+
 				char path_name[100];
-				sprintf(path_name, "./sketchout/%s_%d.jpg", argv[1], (int)(pix_num / page));
+				sprintf(path_name, "%s%d%s", "E:\\C++Workspace\\素材文件\\素描\\1\\out", (int)(pix_num / page), ".png");
+				cout << "层数" << (int)(pix_num / page)+1<< "轮廓的像素数" << pix_num << endl;
 				targetIm1 = imread(path_name);
-				//waitKey(0);	
+
 
 				cout << "contours_poly[" << i << "][" << k << "]" << contours_poly[i][k] << endl;
 				cout << contours_poly[i][k].x << " " << contours_poly[i][k].y << endl;
 
-				if (pix_num == 350) 
+				if (pix_num==pix_sum||pix_num == 350) 
 				{ 
 					goto breakLoop; 
 				}
 
-				if (pix_num>=320)
-				{
-					Mat mixIm;
-					addWeighted(targetIm1, 0.7, originalIm, 0.3, 0, mixIm);
-					char image_name[200];
-					sprintf(image_name, "sumiaoout/image%d.jpg", ++num_pix);
-					imwrite(image_name, mixIm);
-					continue;
-				}
 
 				if (contours_poly[i][k].x + pencilIm.cols >= targetIm.cols)
 				{
@@ -163,8 +168,6 @@ int main()
 		}
 	}
 
- breakLoop:return 0;
-    
-	
+	breakLoop:return 0;
 
 }

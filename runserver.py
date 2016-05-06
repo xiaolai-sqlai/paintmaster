@@ -53,6 +53,25 @@ class Images(Base):
         return '%d' % self.id
 
 
+class Songs(Base):
+    __tablename__ = 'songs'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100))
+
+    def __repr__(self):
+        return '%d' % self.id
+
+
+class Tests(Base):
+    __tablename__ = 'tests'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(255))
+    finish = Column(Integer, default=0)
+
+    def __repr__(self):
+        return '%d' % self.id
+
+
 def getToken():
     appid = 'wx87064f1ba3830580'
     secret = '34e06abdd6ade4ed752046f34193326d'
@@ -76,94 +95,52 @@ DBSession = sessionmaker(bind=engine)
 
 @app.route('/', methods=['GET'])
 def index():
-    userphone = request.cookies.get('userphone')
-    if(userphone == None):
-        return redirect(url_for('login'))
-    return render_template('index.html')
+    if(request.cookies.get('cookie')):
+        return render_template('detail.html')
+    resp = make_response(render_template('detail.html'))
+    cookie = str(int(time.time())) + str(random.randint(10000, 99999))
+    resp.set_cookie('cookie', cookie)
+    return resp
 
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if(request.method == 'GET'):
-        return render_template('login.html')
-    else:
-        userphone = request.form.get('userphone')
-        password = request.form.get('password')
-        session = DBSession()
-        searchPassword = session.query(Member).filter(Member.userphone == userphone).first().password
-        id = session.query(Member).filter(Member.userphone == userphone).first().id
-        session.close()
-        if(searchPassword == None):
-            return '-1'
-        elif(searchPassword != password):
-            return '0'
-        else:
-            return str(id)
+@app.route('/wechat', methods=['GET', 'POST'])
+def wehcat():
+    return render_template('wechat.html')
 
 
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    if(request.method == 'GET'):
-        return render_template('register.html')
-    else:
-        userphone = request.form.get('userphone')
-        password = request.form.get('password')
-        session = DBSession()
-        new_member = Member(userphone=userphone, password=password)
-        session.add(new_member)
-        session.commit()
-        id = session.query(Member).filter(Member.userphone == userphone).first().id
-        session.close()
-        resp = make_response( render_template('index.html') )
-        resp.set_cookie('userphone', userphone)
-        resp.set_cookie('id', str(id))
-        return resp
+@app.route('/wait', methods=['GET', 'POST'])
+def wait():
+    return render_template('wait.html')
 
 
-@app.route('/gallery', methods=['GET', 'POST'])
-def gallery():
-    member = request.cookies.get('id')
-    session = DBSession()
-    images = session.query(Images).filter(Images.finish_img == 1, Images.member == member).all()
-    videos = session.query(Images).filter(Images.finish_video == 1, Images.member == member).all()
-    session.close()
-    return render_template('gallery.html', images=images, videos=videos)
-
-
-@app.route('/detail/<style>', methods=['GET'])
-def detail(style):
-    return render_template('detail.html', style=style)
-
-
-@app.route('/upload/<style>', methods=['GET', 'POST'])
-def upload(style):
-    member = request.cookies.get('id')
+@app.route('/upload', methods=['GET', 'POST'])
+def upload():
+    cookie = request.cookies.get('cookie')
     image = request.files['file']
-    imageName = str(int(time.time())) + str(random.randint(10000, 99999))
-    path = os.path.join(os.path.dirname(__file__), 'static', 'a', 'input', imageName + '.jpg')
-    result = tasks.neural.apply_async(args=[imageName, style])
+    path = os.path.join(os.path.dirname(__file__), 'static', 'a', 'input', cookie + '.jpg')
     image.save(path)
     session = DBSession()
-    new_image = Images(src_img = imageName, member = member, style = style)
-    session.add(new_image)
-    session.commit()
+    if(session.query(Tests).filter(Tests.name == cookie).first().id):
+        alter = session.query(Tests).filter(Tests.name==cookie).first()
+        alter.finish = 0
+        session.add(alter)
+        session.commit()
+    else:
+        test = Tests(name = cookie)
+        session.add(test)
+        session.commit()
     session.close()
-    return redirect(url_for('index'))
+    result = tasks.neural.apply_async(args=[cookie])
+    return redirect(url_for('wait'))
 
 
-@app.route('/image/<id>', methods=['GET', 'POST'])
-def image(id):
+@app.route('/image', methods=['GET', 'POST'])
+def image():
+    cookie = request.cookies.get('cookie')
     session = DBSession()
-    img = session.query(Images).filter(Images.id == id).first()
+    img = session.query(Tests).filter(Tests.name == cookie).order_by(Tests.id.desc()).first()
     session.close()
     return render_template('image.html', show=img)
-
-@app.route('/video/<id>', methods=['GET', 'POST'])
-def video(id):
-    session = DBSession()
-    video = session.query(Images).filter(Images.id == id).first()
-    session.close()
-    return render_template('video.html', show=video)
 
 
 if __name__ == '__main__':
