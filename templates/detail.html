@@ -4,14 +4,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
-    <title>绘图大师</title>
+    <title>上传妈妈的照片</title>
     <link rel="stylesheet" type="text/css" href="/static/css/app.css?1">
     <script src="/static/libs/zepto.js"></script>
 </head>
 <body>
-<header class="gallery-header">
-    <h1>照片选择</h1>
-</header>
 <form id="upload-form" action="/upload" method="POST" enctype="multipart/form-data" data-style="{{style}}">
     <div id="pic"></div>
     <input id="uploadInput" type="file" accept="image/jpeg" name="file">
@@ -28,7 +25,7 @@
     $('#uploadInput').on('change', function(){
         var objUrl = getObjectURL(this.files[0]);
         if (objUrl) {
-            $('#pic').css('backgroundSize', 'cover').css("backgroundImage","url("+ objUrl +")");
+            $('#pic').css('backgroundSize', 'contain').css('backgroundRepeat', 'no-repeat').css("backgroundImage","url("+ objUrl +")");
             $('#camera').hide()
             $('#btn-group').show();
         }

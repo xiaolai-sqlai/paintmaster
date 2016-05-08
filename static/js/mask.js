@@ -1,27 +1,27 @@
 var cvs = document.getElementById("canvas"),
-ctx = cvs.getContext("2d"),
-touchRadius = 30,  
-winWidth = window.innerWidth,
-winHeight = window.innerHeight;
+	ctx = cvs.getContext("2d"),
+	touchRadius = 30,
+	winWidth = window.innerWidth,
+	winHeight = window.innerHeight;
 
 
 cvs.width = winWidth;
 cvs.height = winHeight;
 ctx.fillStyle = "#fff";
-ctx.fillRect(0, 0, winWidth, winHeight);    
+ctx.fillRect(0, 0, winWidth, winHeight);
 
 var fillCircle = function (x, y, radius, fillColor) {
 	this.fillStyle = fillColor || '#fff';
 	this.beginPath();
 	this.moveTo(x, y);
-	this.arc(x, y, radius, 0, Math.PI * 2);   
+	this.arc(x, y, radius, 0, Math.PI * 2);
 	this.fill();
 };
 
 
 var device = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(navigator.userAgent.toLowerCase()),
-clickEvtName = device ? 'touchstart' : 'mousedown',
-moveEvtName = device ? 'touchmove' : 'mousemove';
+	clickEvtName = device ? 'touchstart' : 'mousedown',
+	moveEvtName = device ? 'touchmove' : 'mousemove';
 
 
 if (!device) {
@@ -46,7 +46,8 @@ cvs.addEventListener(clickEvtName, function (e) {
 	var x = (device ? e.touches[0].clientX : e.clientX);
 	var y = (device ? e.touches[0].clientY : e.clientY);
 	ctx.globalCompositeOperation = 'destination-out';
-	fillCircle.call(ctx, x, y-55, touchRadius);
+	//fillCircle.call(ctx, x, y-55, touchRadius);
+	fillCircle.call(ctx, x, y+40, touchRadius);
 }, false);
 
 
@@ -57,10 +58,11 @@ cvs.addEventListener(moveEvtName, function (e) {
 	var x = (device ? e.touches[0].clientX : e.clientX);
 	var y = (device ? e.touches[0].clientY : e.clientY);
 	ctx.globalCompositeOperation = 'destination-out';
-	fillCircle.call(ctx, x, y-55, touchRadius);
+	//fillCircle.call(ctx, x, y-55, touchRadius);
+	fillCircle.call(ctx, x, y+40, touchRadius);
 }, false);
 
 var audio = document.getElementById('audio');
 document.addEventListener('touchstart', function(){
-    audio.play();
+	audio.play();
 }, false);

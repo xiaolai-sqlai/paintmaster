@@ -4,35 +4,58 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
-    <title>绘图大师</title>
+    <title>绘拍大师</title>
     <link rel="stylesheet" type="text/css" href="/static/css/app.css">
     <style>
         #canvas {
             display: block;
             position: absolute;
-            top: 55px;
-            bottom: 80px;
+            bottom: 40px;
             left: 0;
+            z-index: 2;
             opacity: 0.95;
         }
         .image-main img {
             position: absolute;
             width: 100%;
         }
+        .image-main p {
+            font-size: 20px;
+            color: #fff;
+            position: absolute;
+            text-align: center;
+            width: 100%;
+            z-index: 1;
+            bottom: 25vh;
+        }
+        .image-main p span {
+            color: #ee4c36;
+            font-size: 24px;;
+        }
+        #footer {
+            z-index: 3;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 60px;
+            line-height: 30px;
+            text-align: center;
+            background-color: #333;
+            color: #f1f1f1;
+        }
     </style>
 </head>
 <body>
-<header class="gallery-header">
-    <h1>作品陈列室</h1>
-</header>
 <main class="image-main">
     <img src="/static/a/output/{{show.name}}.gif" alt="">
     <canvas id="canvas">你的浏览器不支持canvas</canvas>
+    <p>妈妈，我<span>爱</span>您</p>
     <audio id="audio" src="/static/a/audio/15.mp3"></audio>
-    <script src="/static/js/mask.js"></script>
+    <script src="/static/js/mask.js?1"></script>
 </main>
-<footer>
-    <a href="wechat">关注公众号</a>
-</footer>
+<a id="footer" href="/wechat">
+    对世界说：“妈妈，我爱你。”<br>
+    2016年母亲节爱的接力
+</a>
 </body>
 </html>

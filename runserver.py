@@ -5,7 +5,7 @@ from sqlalchemy.types import String, Integer, DateTime, Date
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 import tasks
-import sys, os, datetime, time, random, string, hashlib, urllib
+import sys, os, datetime, time, random, urllib
 
 reload(sys)
 sys.setdefaultencoding("utf-8")
@@ -120,25 +120,32 @@ def upload():
     path = os.path.join(os.path.dirname(__file__), 'static', 'a', 'input', cookie + '.jpg')
     image.save(path)
     session = DBSession()
-    if(session.query(Tests).filter(Tests.name == cookie).first().id):
+    if(session.query(Tests).filter(Tests.name == cookie).first()):
         alter = session.query(Tests).filter(Tests.name==cookie).first()
         alter.finish = 0
-        session.add(alter)
-        session.commit()
     else:
-        test = Tests(name = cookie)
-        session.add(test)
-        session.commit()
+        alter = Tests(name = cookie)
+    session.add(alter)
+    session.commit()
+    id = session.query(Tests).filter(Tests.name==cookie).first().id
     session.close()
     result = tasks.neural.apply_async(args=[cookie])
-    return redirect(url_for('wait'))
+    return render_template('wait.html',id=id)
+#
+#
+# @app.route('/image', methods=['GET', 'POST'])
+# def image():
+#     cookie = request.cookies.get('cookie')
+#     session = DBSession()
+#     img = session.query(Tests).filter(Tests.name == cookie).first()
+#     session.close()
+#     return render_template('image.html', show=img)
 
 
-@app.route('/image', methods=['GET', 'POST'])
-def image():
-    cookie = request.cookies.get('cookie')
+@app.route('/image/<int:id>', methods=['GET', 'POST'])
+def image(id):
     session = DBSession()
-    img = session.query(Tests).filter(Tests.name == cookie).order_by(Tests.id.desc()).first()
+    img = session.query(Tests).filter(Tests.id == id).first()
     session.close()
     return render_template('image.html', show=img)
 

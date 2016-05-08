@@ -5,32 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
     <title>绘图大师</title>
+    <script src="/static/libs/zepto.js"></script>
     <link rel="stylesheet" type="text/css" href="/static/css/app.css">
     <style>
+        body {
+            height: 100vh;
+        }
+        .image-main {
+            height: 100%;
+            background: #000 url("/static/images/bg.gif") no-repeat;
+            background-size: contain;
+        }
         .image-main h1 {
             text-align: center;
             margin-top: 50px;
         }
         .image-main a {
+            display: none;
             position: absolute;
             text-align: center;
-            width: 40vw;
-            bottom: 30px;
-            left: 30vw;
+            width: 50vw;
+            bottom: 1vh;
+            left: 25vw;
             height: 35px;
             line-height: 35px;
-            background-color: #ffd739;
+            background-color: #3981FF;
+            font-size: 18px;
             color: #eee;
+            border-radius: 20px;
         }
     </style>
 </head>
 <body>
-<header class="gallery-header">
-    <h1>绘图大师</h1>
-</header>
 <main class="image-main">
-    <h1>等待结果</h1>
-    <a href="image">查看结果</a>
+    <a href="/image/{{id}}">妈妈，我爱你</a>
 </main>
+<script>
+    setTimeout(function(){
+        $('.image-main a').show(500);
+    },7000)
+</script>
 </body>
 </html>
